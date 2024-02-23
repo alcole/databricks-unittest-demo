@@ -59,3 +59,34 @@
 # MAGIC ELSE
 # MAGIC   printf("Table 'main.default.diamonds' does not exist.")
 # MAGIC END
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC USE CATALOG main;
+# MAGIC USE SCHEMA default;
+# MAGIC
+# MAGIC CREATE VIEW view_diamonds AS
+# MAGIC SELECT * FROM diamonds;
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT if(table_exists("main", "default", "view_diamonds"),
+# MAGIC           printf("PASS: The table 'main.default.view_diamonds' exists."),
+# MAGIC           printf("FAIL: The table 'main.default.view_diamonds' does not exist."));
+# MAGIC
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT if(column_exists("main", "default", "view_diamonds", "clarity"),
+# MAGIC           printf("PASS: The column 'clarity' exists in the table 'main.default.view_diamonds'."),
+# MAGIC           printf("FAIL: The column 'clarity' does not exists in the table 'main.default.view_diamonds'."));
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT if(num_rows_for_clarity_in_diamonds("VVS2") > 0,
+# MAGIC           printf("PASS: The table 'main.default.view_diamonds' has at least one row where the column 'clarity' equals 'VVS2'."),
+# MAGIC           printf("FAIL: The table 'main.default.view_diamonds' does not have at least one row where the column 'clarity' equals 'VVS2'."));
